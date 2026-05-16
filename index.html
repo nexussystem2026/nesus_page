@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>NexusPro | Digital Ecosystems</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        nexus: {
+                            blue: '#00b4d8', 
+                            purple: '#4a0e4e',
+                            dark: '#0a0a0a',
+                            glass: 'rgba(255, 255, 255, 0.05)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-panel:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(0, 180, 216, 0.5);
+            transform: translateY(-5px);
+            transition: all 0.4s ease;
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #ffffff, #00b4d8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .video-overlay {
+            background: linear-gradient(180deg, rgba(10, 10, 10, 0.6) 0%, rgba(10, 10, 10, 0.95) 100%);
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .flag-btn {
+            transition: transform 0.2s;
+            filter: grayscale(0.8);
+            border: 2px solid transparent;
+        }
+        .flag-btn:hover {
+            transform: scale(1.1);
+            filter: grayscale(0);
+        }
+        .flag-btn.active {
+            filter: grayscale(0);
+            border-color: #00b4d8;
+        }
+    </style>
+</head>
+<body class="bg-nexus-dark text-gray-300 font-sans antialiased overflow-x-hidden pb-16 md:pb-0">
+
+    <nav class="fixed w-full z-50 transition-all duration-300 glass-panel border-b-0 border-white/5 h-24" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center h-full">
+            <a href="javascript:void(0)" onclick="showPage('home')" class="flex items-center cursor-pointer">
+                <img src="logo.png" alt="NexusPro Logo" class="h-20 md:h-24 w-auto object-contain drop-shadow-[0_0_15px_rgba(0,180,216,0.3)]">
+            </a>
+            
+            <div class="hidden md:flex items-center space-x-8 font-medium text-sm tracking-wide">
+                <a href="javascript:void(0)" onclick="showPage('home')" class="hover:text-nexus-blue transition-colors lang" data-es="Inicio" data-en="Home">Inicio</a>
+                <a href="#vision" class="hover:text-nexus-blue transition-colors lang" data-es="Visión" data-en="Vision">Visión</a>
+                <a href="#ecosystem" class="hover:text-nexus-blue transition-colors lang" data-es="Ecosistema" data-en="Ecosystem">Ecosistema</a>
+                
+                <div class="flex items-center gap-4 border-l border-white/20 pl-6">
+                    <button id="btn-es" onclick="setLanguage('es')" class="flag-btn rounded-full overflow-hidden w-7 h-7 shadow-lg" title="Español">
+                        <img src="https://flagcdn.com/w40/cl.png" alt="ES" class="w-full h-full object-cover">
+                    </button>
+                    <button id="btn-en" onclick="setLanguage('en')" class="flag-btn rounded-full overflow-hidden w-7 h-7 shadow-lg" title="English">
+                        <img src="https://flagcdn.com/w40/us.png" alt="EN" class="w-full h-full object-cover">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="md:hidden fixed bottom-0 left-0 w-full glass-panel border-t border-white/10 z-50 py-3 px-6 flex justify-around items-center backdrop-blur-xl">
+        <a href="javascript:void(0)" onclick="showPage('home')" class="text-gray-400 hover:text-nexus-blue flex flex-col items-center gap-1 transition-colors">
+            <i class="fa-solid fa-house text-xl"></i>
+            <span class="text-[10px] lang font-medium" data-es="Inicio" data-en="Home">Inicio</span>
+        </a>
+        <a href="#ecosystem" class="text-gray-400 hover:text-nexus-blue flex flex-col items-center gap-1 transition-colors">
+            <i class="fa-solid fa-layer-group text-xl"></i>
+            <span class="text-[10px] lang font-medium" data-es="Divisiones" data-en="Divisions">Divisiones</span>
+        </a>
+        <a href="#contact" class="text-gray-400 hover:text-nexus-blue flex flex-col items-center gap-1 transition-colors">
+            <i class="fa-solid fa-envelope text-xl"></i>
+            <span class="text-[10px] lang font-medium" data-es="Contacto" data-en="Contact">Contacto</span>
+        </a>
+    </div>
+
+    <main id="main-content">
+        <div id="page-home" class="view">
+            <header class="relative min-h-screen flex items-center justify-center pt-32 pb-20 overflow-hidden">
+                <video autoplay loop muted playsinline class="absolute inset-0 z-0 w-full h-full object-cover opacity-60">
+                    <source src="video_1.mp4" type="video/mp4">
+                </video>
+                <div class="absolute z-10 inset-0 video-overlay"></div>
+
+                <div class="relative z-20 max-w-5xl mx-auto px-6 text-center reveal active">
+                    <h2 class="text-nexus-blue font-semibold tracking-[0.2em] uppercase text-sm mb-6 lang" data-es="Agencia de Tecnología y Medios" data-en="Media & Technology Agency">Agencia de Tecnología y Medios</h2>
+                    <h1 class="font-heading font-black text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-white leading-tight mb-8 tracking-tighter">
+                        <span class="lang" data-es="EL FUTURO DE LA" data-en="THE FUTURE OF">EL FUTURO DE LA</span><br>
+                        <span class="text-gradient lang" data-es="ARQUITECTURA DIGITAL" data-en="DIGITAL ARCHITECTURE">ARQUITECTURA DIGITAL</span>
+                    </h1>
+                    <p class="mt-4 text-lg md:text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed lang" data-es="Fusionando excelencia publicitaria con tecnología de vanguardia. Diseñamos ecosistemas rentables." data-en="Merging advertising excellence with high-end technology. We design profitable ecosystems.">
+                        Fusionando excelencia publicitaria con tecnología de vanguardia. Diseñamos ecosistemas rentables.
+                    </p>
+                    <div class="mt-12 flex flex-col sm:flex-row justify-center gap-6">
+                        <a href="#ecosystem" class="px-8 py-4 bg-nexus-blue text-black font-bold rounded-sm hover:bg-white transition-all shadow-[0_0_20px_rgba(0,180,216,0.4)] lang" data-es="Explorar Servicios" data-en="Explore Services">Explorar Servicios</a>
+                        <a href="https://wa.me/56926874783" class="px-8 py-4 glass-panel text-white font-semibold rounded-sm hover:text-nexus-blue transition-all lang" data-es="Agendar Asesoría" data-en="Book Consultation">Agendar Asesoría</a>
+                    </div>
+                </div>
+            </header>
+
+            <section id="vision" class="py-24 bg-nexus-dark border-t border-white/5">
+                <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                        <div class="reveal">
+                            <h3 class="font-heading text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                                <span class="lang" data-es="No construimos páginas." data-en="We don't build pages.">No construimos páginas.</span><br>
+                                <span class="text-nexus-blue lang" data-es="Diseñamos activos." data-en="We engineer assets.">Diseñamos activos.</span>
+                            </h3>
+                            <p class="text-gray-400 text-lg leading-relaxed mb-6 lang" data-es="En NexusPro, entendemos que tu negocio no necesita más gastos mensuales. Combinamos ingeniería de software con estrategias de neuromarketing." data-en="At NexusPro, we understand your business doesn't need more monthly expenses. We combine software engineering with neuromarketing strategies.">
+                                En NexusPro, entendemos que tu negocio no necesita más gastos mensuales. Combinamos ingeniería de software con estrategias de neuromarketing.
+                            </p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 reveal delay-200">
+                            <div class="glass-panel p-8 rounded-xl text-center">
+                                <i class="fa-solid fa-server text-4xl text-nexus-blue mb-4"></i>
+                                <h4 class="text-white font-bold text-xl mb-3 lang" data-es="Cero Hosting" data-en="Zero Hosting">Cero Hosting</h4>
+                                <p class="text-sm text-gray-400 lang" data-es="Pago único para siempre." data-en="One-time payment forever.">Pago único para siempre.</p>
+                            </div>
+                            <div class="glass-panel p-8 rounded-xl text-center">
+                                <i class="fa-solid fa-bolt text-4xl text-nexus-blue mb-4"></i>
+                                <h4 class="text-white font-bold text-xl mb-3 lang" data-es="Ultra Rápido" data-en="Ultra Fast">Ultra Rápido</h4>
+                                <p class="text-sm text-gray-400 lang" data-es="Carga instantánea." data-en="Instant loading.">Carga instantánea.</p>
+                            </div>
+                            <div class="glass-panel p-8 rounded-xl text-center">
+                                <i class="fa-solid fa-eye text-4xl text-nexus-blue mb-4"></i>
+                                <h4 class="text-white font-bold text-xl mb-3 lang" data-es="Visual First" data-en="Visual First">Visual First</h4>
+                                <p class="text-sm text-gray-400 lang" data-es="Diseño premium." data-en="Premium design.">Diseño premium.</p>
+                            </div>
+                            <div class="glass-panel p-8 rounded-xl text-center">
+                                <i class="fa-brands fa-whatsapp text-4xl text-nexus-blue mb-4"></i>
+                                <h4 class="text-white font-bold text-xl mb-3 lang" data-es="Integrado" data-en="Integrated">Integrado</h4>
+                                <p class="text-sm text-gray-400 lang" data-es="Ventas directas." data-en="Direct sales.">Ventas directas.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ecosystem" class="py-24 bg-black relative">
+                <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                    <div class="text-center mb-20 reveal">
+                        <h2 class="font-heading text-4xl md:text-5xl font-bold text-white mb-6 lang" data-es="Divisiones NexusPro" data-en="NexusPro Divisions">Divisiones NexusPro</h2>
+                        <div class="h-1 w-24 bg-nexus-blue mx-auto rounded-full"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <div class="glass-panel p-10 rounded-2xl reveal cursor-pointer" onclick="showPage('web')">
+                            <i class="fa-solid fa-code text-nexus-blue text-4xl mb-6"></i>
+                            <h3 class="text-2xl font-bold text-white mb-4 lang" data-es="Arquitectura Web" data-en="Web Architecture">Arquitectura Web</h3>
+                            <p class="text-gray-400 mb-8 lang" data-es="Páginas corporativas y catálogos de alto rendimiento." data-en="High-performance corporate pages and catalogs.">Páginas corporativas y catálogos de alto rendimiento.</p>
+                            <span class="text-nexus-blue font-bold lang" data-es="Ver División &rarr;" data-en="View Division &rarr;">Ver División &rarr;</span>
+                        </div>
+                        <div class="glass-panel p-10 rounded-2xl reveal delay-100 cursor-pointer" onclick="showPage('signage')">
+                            <i class="fa-solid fa-tv text-nexus-blue text-4xl mb-6"></i>
+                            <h3 class="text-2xl font-bold text-white mb-4 lang" data-es="Menús Digitales" data-en="Digital Signage">Menús Digitales</h3>
+                            <p class="text-gray-400 mb-8 lang" data-es="Cartelería digital dinámica para restaurantes y retail." data-en="Dynamic digital signage for restaurants and retail.">Cartelería digital dinámica para restaurantes y retail.</p>
+                            <span class="text-nexus-blue font-bold lang" data-es="Ver División &rarr;" data-en="View Division &rarr;">Ver División &rarr;</span>
+                        </div>
+                        <div class="glass-panel p-10 rounded-2xl reveal cursor-pointer" onclick="showPage('media')">
+                            <i class="fa-solid fa-camera-retro text-nexus-blue text-4xl mb-6"></i>
+                            <h3 class="text-2xl font-bold text-white mb-4 lang" data-es="Media & Redes" data-en="Media & Social">Media & Redes</h3>
+                            <p class="text-gray-400 mb-8 lang" data-es="Producción audiovisual y gestión estratégica de marca." data-en="Audiovisual production and strategic brand management.">Producción audiovisual y gestión estratégica de marca.</p>
+                            <span class="text-nexus-blue font-bold lang" data-es="Ver División &rarr;" data-en="View Division &rarr;">Ver División &rarr;</span>
+                        </div>
+                        <div class="glass-panel p-10 rounded-2xl reveal delay-100 cursor-pointer" onclick="showPage('weddings')">
+                            <i class="fa-solid fa-rings-wedding text-nexus-blue text-4xl mb-6"></i>
+                            <h3 class="text-2xl font-bold text-white mb-4 lang" data-es="Smart Weddings" data-en="Smart Weddings">Smart Weddings</h3>
+                            <p class="text-gray-400 mb-8 lang" data-es="Experiencias digitales interactivas para eventos premium." data-en="Interactive digital experiences for premium events.">Experiencias digitales interactivas para eventos premium.</p>
+                            <span class="text-nexus-blue font-bold lang" data-es="Ver División &rarr;" data-en="View Division &rarr;">Ver División &rarr;</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="page-detail" class="view hidden pt-32 pb-24 min-h-screen px-6 relative">
+            
+            <video autoplay loop muted playsinline class="absolute inset-0 z-0 w-full h-full object-cover opacity-80">
+                <source src="video_2.mp4" type="video/mp4">
+            </video>
+            <div class="absolute inset-0 z-10 bg-black/50 pointer-events-none"></div>
+
+            <div class="max-w-4xl mx-auto relative z-20">
+                <button onclick="showPage('home')" class="text-nexus-blue mb-8 hover:text-white transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> <span class="lang" data-es="Volver al Inicio" data-en="Back to Home">Volver al Inicio</span>
+                </button>
+                <div id="detail-content" class="reveal active">
+                    </div>
+            </div>
+        </div>
+    </main>
+
+    <footer id="contact" class="py-24 bg-nexus-dark border-t border-white/10">
+        <div class="max-w-4xl mx-auto px-6 text-center reveal">
+            <h2 class="text-3xl font-bold text-white mb-8 lang" data-es="¿Listo para empezar?" data-en="Ready to start?">¿Listo para empezar?</h2>
+            
+            <a href="https://wa.me/56926874783" class="inline-flex items-center gap-4 bg-green-600 hover:bg-green-500 text-white px-10 py-5 rounded-full text-xl font-black transition-all shadow-[0_0_30px_rgba(22,163,74,0.4)]">
+                <i class="fa-brands fa-whatsapp text-3xl"></i> +569 2687 4783
+            </a>
+            
+            <div class="mt-10 flex justify-center items-center gap-8">
+                <a href="https://instagram.com/tu_usuario" target="_blank" class="text-gray-400 hover:text-[#E1306C] transition-colors duration-300 transform hover:scale-110" title="Instagram">
+                    <i class="fa-brands fa-instagram text-3xl"></i>
+                </a>
+                <a href="https://tiktok.com/@tu_usuario" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-300 transform hover:scale-110" title="TikTok">
+                    <i class="fa-brands fa-tiktok text-3xl"></i>
+                </a>
+                <a href="mailto:tu-correo@nexuspro.com" class="text-gray-400 hover:text-nexus-blue transition-colors duration-300 transform hover:scale-110" title="Email">
+                    <i class="fa-solid fa-envelope text-3xl"></i>
+                </a>
+            </div>
+
+            <p class="mt-8 text-gray-500 text-sm">© 2026 NexusPro Global | Digital Architecture</p>
+        </div>
+    </footer>
+
+    <script>
+        // Contenido extendido para cada división
+        const pages = {
+            web: {
+                title_es: "Arquitectura Web B2B",
+                title_en: "B2B Web Architecture",
+                content_es: "Diseñamos ecosistemas digitales optimizados para la conversión. Nuestra metodología elimina los costos de hosting mensual y asegura que tu sitio cargue en menos de 1 segundo en cualquier lugar del mundo. Ideal para empresas de logística, transporte y servicios corporativos.",
+                content_en: "We design conversion-optimized digital ecosystems. Our methodology eliminates monthly hosting costs and ensures your site loads in under 1 second worldwide. Ideal for logistics, transport, and corporate service companies."
+            },
+            signage: {
+                title_es: "Menús Digitales y Signage",
+                title_en: "Digital Menus & Signage",
+                content_es: "Transformamos tus pantallas físicas en activos de venta dinámicos. Gestionamos menús digitales que se actualizan en tiempo real, cartelería para retail y pantallas publicitarias de alto impacto visual.",
+                content_en: "We transform your physical screens into dynamic sales assets. We manage real-time updated digital menus, retail signage, and high-impact advertising displays."
+            },
+            media: {
+                title_es: "Media & Redes Sociales",
+                title_en: "Media & Social Strategy",
+                content_es: "Creamos la identidad visual de tu marca. Desde diseño de logotipos y flyers hasta producción de video profesional. Gestionamos tus redes sociales con un enfoque basado en datos para maximizar el engagement.",
+                content_en: "We create your brand's visual identity. From logo and flyer design to professional video production. We manage your social media with a data-driven focus to maximize engagement."
+            },
+            weddings: {
+                title_es: "Smart Weddings",
+                title_en: "Smart Weddings Experience",
+                content_es: "La tecnología llega a tu evento. Ofrecemos invitaciones inteligentes por QR, confirmación de asistencia automatizada y Live Photo Walls donde las fotos de tus invitados se proyectan en vivo durante la fiesta.",
+                content_en: "Technology meets your event. We offer smart QR invitations, automated RSVP, and Live Photo Walls where your guests' photos are projected live during the party."
+            }
+        };
+
+        function showPage(pageId) {
+            const home = document.getElementById('page-home');
+            const detail = document.getElementById('page-detail');
+            const content = document.getElementById('detail-content');
+
+            window.scrollTo(0, 0);
+            if (pageId === 'home') {
+                home.classList.remove('hidden');
+                detail.classList.add('hidden');
+            } else {
+                home.classList.add('hidden');
+                detail.classList.remove('hidden');
+                
+                const data = pages[pageId];
+                const lang = document.documentElement.lang || 'es';
+                content.innerHTML = `
+                    <h1 class="text-5xl font-black text-white mb-6">${lang === 'es' ? data.title_es : data.title_en}</h1>
+                    <div class="h-1 w-24 bg-nexus-blue mb-8"></div>
+                    <p class="text-xl text-gray-400 leading-relaxed mb-12">${lang === 'es' ? data.content_es : data.content_en}</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="glass-panel p-8 rounded-2xl border-nexus-blue/10">
+                            <h4 class="text-nexus-blue font-bold text-xl mb-4">Estrategia</h4>
+                            <p class="text-gray-400">Analizamos tu mercado para implementar la solución técnica que garantice el retorno de inversión.</p>
+                        </div>
+                        <div class="glass-panel p-8 rounded-2xl border-nexus-blue/10">
+                            <h4 class="text-nexus-blue font-bold text-xl mb-4">Soporte</h4>
+                            <p class="text-gray-400">Acompañamiento continuo en la evolución de tu ecosistema digital.</p>
+                        </div>
+                    </div>
+                    <div class="mt-12">
+                        <a href="https://wa.me/56926874783" class="inline-block bg-white text-black font-bold px-8 py-4 rounded-sm hover:bg-nexus-blue transition-colors">
+                            ${lang === 'es' ? 'Solicitar Presupuesto' : 'Request Quote'}
+                        </a>
+                    </div>
+                `;
+            }
+        }
+
+        function setLanguage(lang) {
+            const elements = document.querySelectorAll('.lang');
+            elements.forEach(el => {
+                if (el.dataset[lang]) el.innerHTML = el.dataset[lang];
+            });
+            document.documentElement.lang = lang;
+            
+            // Actualizar clases de banderas de forma segura
+            document.querySelectorAll('.flag-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const activeBtn = document.getElementById(`btn-${lang}`);
+            if (activeBtn) activeBtn.classList.add('active');
+            
+            localStorage.setItem('nexus_lang', lang);
+        }
+
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                if (elementTop < windowHeight - 100) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+
+        window.addEventListener("scroll", reveal);
+        document.addEventListener('DOMContentLoaded', () => {
+            reveal();
+            const savedLang = localStorage.getItem('nexus_lang') || 'es';
+            // Llamamos a setLanguage pero sin pasar el evento para evitar el error de undefined
+            setLanguage(savedLang);
+        });
+    </script>
+</body>
+</html>
